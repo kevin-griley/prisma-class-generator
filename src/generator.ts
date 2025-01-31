@@ -6,12 +6,10 @@ import {
 	getRelativeTSPath,
 	parseBoolean,
 	parseNumber,
-	prettierFormat,
 	writeTSFile,
 } from './util'
 import { INDEX_TEMPLATE } from './templates/index.template'
 import { ImportComponent } from './components/import.component'
-import * as prettier from 'prettier'
 import { FileComponent } from './components/file.component'
 
 export const GENERATOR_NAME = 'Prisma Class Generator'
@@ -23,14 +21,14 @@ export const PrismaClassGeneratorOptions = {
 	},
 	dryRun: {
 		desc: 'dry run',
-		defaultValue: true,
+		defaultValue: false,
 	},
 	separateRelationFields: {
 		desc: 'separate relation fields',
-		defaultValue: false,
+		defaultValue: true,
 	},
 	useSwagger: {
-		desc: 'use swagger decorstor',
+		desc: 'use swagger decorator',
 		defaultValue: true,
 	},
 	useGraphQL: {
@@ -64,7 +62,6 @@ export type PrismaClassGeneratorConfig = Partial<
 export class PrismaClassGenerator {
 	static instance: PrismaClassGenerator
 	_options: GeneratorOptions
-	_prettierOptions: prettier.Options
 	rootPath: string
 	clientPath: string
 
@@ -73,11 +70,6 @@ export class PrismaClassGenerator {
 			this.options = options
 		}
 		const output = parseEnvValue(options.generator.output!)
-		this.prettierOptions =
-			prettier.resolveConfig.sync(output, { useCache: false }) ||
-			prettier.resolveConfig.sync(path.dirname(require.main.filename), {
-				useCache: false,
-			})
 	}
 
 	public get options() {
@@ -86,14 +78,6 @@ export class PrismaClassGenerator {
 
 	public set options(value) {
 		this._options = value
-	}
-
-	public get prettierOptions() {
-		return this._prettierOptions
-	}
-
-	public set prettierOptions(value) {
-		this._prettierOptions = value
 	}
 
 	static getInstance(options?: GeneratorOptions) {
@@ -185,11 +169,8 @@ export class PrismaClassGenerator {
 					'#!{CLASSES}',
 					files.map((f) => f.prismaClass.name).join(', '),
 				)
-			const formattedContent = prettierFormat(
-				content,
-				this.prettierOptions,
-			)
-			writeTSFile(indexFilePath, formattedContent, config.dryRun)
+
+			writeTSFile(indexFilePath, content, config.dryRun)
 		}
 		return
 	}

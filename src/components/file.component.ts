@@ -1,7 +1,7 @@
 import { pascalCase, snakeCase } from 'change-case'
 import { ClassComponent } from './class.component'
 import * as path from 'path'
-import { getRelativeTSPath, prettierFormat, writeTSFile } from '../util'
+import { getRelativeTSPath, writeTSFile } from '../util'
 import { PrismaClassGenerator } from '../generator'
 import { Echoable } from '../interfaces/echoable'
 import { ImportComponent } from './import.component'
@@ -103,7 +103,7 @@ export class FileComponent implements Echoable {
 
 		if (this.prismaClass.types) {
 			this.prismaClass.types.forEach((type) => {
-				this.registerImport(type, './' + type.toLowerCase())
+				this.registerImport(type, './' + snakeCase(type))
 			})
 		}
 
@@ -118,7 +118,7 @@ export class FileComponent implements Echoable {
 	write(dryRun: boolean) {
 		const generator = PrismaClassGenerator.getInstance()
 		const filePath = path.resolve(this.dir, this.filename)
-		const content = prettierFormat(this.echo(), generator.prettierOptions)
+		const content = this.echo()
 		writeTSFile(filePath, content, dryRun)
 	}
 

@@ -4,7 +4,6 @@ import * as fs from 'fs'
 import { GENERATOR_NAME } from './generator'
 import { GeneratorFormatNotValidError } from './error-handler'
 import { DMMF } from '@prisma/generator-helper'
-import { Options, format } from 'prettier'
 
 export const capitalizeFirst = (src: string) => {
 	return src.charAt(0).toUpperCase() + src.slice(1)
@@ -84,8 +83,4 @@ export const writeTSFile = (
 		fs.mkdirSync(dirname, { recursive: true })
 	}
 	fs.writeFileSync(fullPath, content)
-}
-
-export const prettierFormat = (content: string, options: Options = {}) => {
-	return format(content, { ...options, parser: 'typescript' })
 }
