@@ -22,7 +22,7 @@ class FieldComponent extends base_component_1.BaseComponent {
             }
             let defaultValue = '';
             if (this.default) {
-                if (!isNaN(Date.parse(this.default))) {
+                if (this.type === 'Date' && !isNaN(Date.parse(this.default))) {
                     defaultValue = `= new Date('${this.default}')`;
                 }
                 else {
