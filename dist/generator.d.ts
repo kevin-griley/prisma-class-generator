@@ -34,7 +34,7 @@ export declare const PrismaClassGeneratorOptions: {
         readonly defaultValue: false;
     };
     readonly preserveDefaultNullable: {
-        readonly defaultValue: false;
+        readonly defaultValue: true;
         readonly desc: "preserve default nullable behavior";
     };
 };

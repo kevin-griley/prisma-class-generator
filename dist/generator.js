@@ -76,7 +76,7 @@ exports.PrismaClassGeneratorOptions = {
         defaultValue: false,
     },
     preserveDefaultNullable: {
-        defaultValue: false,
+        defaultValue: true,
         desc: 'preserve default nullable behavior',
     },
 };
